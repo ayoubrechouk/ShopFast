@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopfast</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Using a nice Google Font for that extra polish -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="#" class="brand">
+         Shopfast
+      </a>
+      <div class="nav-actions">
+        <span class="nav-tagline">Fresh deals, every day.</span>
+        <button class="cart-btn" id="cartToggleBtn" aria-label="Open shopping cart">
+          🛒 Cart
+          <!-- This badge updates dynamically via JS -->
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- ===================== CONTENT ===================== -->
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Everything you need,<br /><span class="highlight">one click away.</span></h1>
+        <p>Discover our handpicked collection of everyday essentials.</p>
+        <a href="#products" class="btn btn-primary">Shop Now ↓</a>
+      </div>
+    </section>
+
+    <section class="products-section" id="products">
+      <div class="container">
+        <h2 class="section-title">Our Products</h2>
+        <div class="product-grid" id="productGrid">
+          <p class="loading-msg">Loading products...</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ===================== CART SIDEBAR ===================== -->
+  <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping Cart">
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <div class="cart-panel">
+      <div class="cart-header">
+        <h2>Your Cart 🛒</h2>
+        <button class="close-btn" id="cartCloseBtn" aria-label="Close cart">✕</button>
+      </div>
+
+      <div class="cart-items" id="cartItems">
+        <p class="empty-cart-msg">Your cart is empty. Go add something! 😊</p>
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <strong id="cartTotal">$0.00</strong>
+        </div>
+        <button class="btn btn-primary btn-block" id="checkoutBtn">
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+
+  </aside>
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+       <strong>Shopfast</strong> — Ayoub's web dev project. Built with ❤️ using
+        HTML, CSS &amp; vanilla JS.
+      </p>
+      <p class="footer-sub">
+        No frameworks were harmed in the making of this website.
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- ===================== TOAST NOTIFICATION ===================== -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

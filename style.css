@@ -1,0 +1,731 @@
+/* =============================================================
+   QuickCart — style.css
+   Author: Student Project
+   Description: Main stylesheet for the QuickCart e-commerce site.
+   
+   TABLE OF CONTENTS:
+   1. CSS Variables (Design Tokens)
+   2. Reset & Base Styles
+   3. Utility Classes
+   4. Header & Navbar
+   5. Hero Section
+   6. Products Section & Grid
+   7. Product Card
+   8. Cart Sidebar & Overlay
+   9. Cart Items
+   10. Toast Notification
+   11. Footer
+   12. Responsive Design (Mobile)
+   ============================================================= */
+
+
+/* ─────────────────────────────────────────────
+   1. CSS Variables — Define your palette here!
+   Changing these 5 colors changes the whole site.
+   ───────────────────────────────────────────── */
+:root {
+  /* Brand Colors */
+  --color-primary:     #6c63ff;   /* Purple — buttons, highlights */
+  --color-primary-dark:#574fd6;   /* Darker purple for hover states */
+  --color-accent:      #ff6584;   /* Pink — small accents */
+
+  /* Neutral Colors */
+  --color-bg:          #f7f7fb;   /* Page background — off-white */
+  --color-surface:     #ffffff;   /* Cards, panels */
+  --color-border:      #e8e8f0;   /* Subtle borders */
+
+  /* Text Colors */
+  --color-text:        #1a1a2e;   /* Main text — deep navy */
+  --color-text-muted:  #6b7280;   /* Secondary text — gray */
+
+  /* Sizing & Spacing */
+  --radius:            12px;      /* Border radius for cards */
+  --radius-sm:         8px;
+  --shadow:            0 4px 20px rgba(108, 99, 255, 0.1);
+  --shadow-hover:      0 8px 30px rgba(108, 99, 255, 0.2);
+
+  /* Cart Sidebar Width */
+  --cart-width:        380px;
+
+  /* Transitions */
+  --transition:        0.25s ease;
+}
+
+
+/* ─────────────────────────────────────────────
+   2. Reset & Base Styles
+   Remove default browser styling inconsistencies
+   ───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth; /* Enables smooth scroll for the "Shop Now" link */
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  /* Prevent horizontal scroll when cart sidebar slides in */
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+ul {
+  list-style: none;
+}
+
+
+/* ─────────────────────────────────────────────
+   3. Utility Classes
+   Small reusable helpers
+   ───────────────────────────────────────────── */
+
+/* Centers content and gives it a max-width */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Primary button style — used all over the site */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.35);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.45);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Makes button fill the full width of its container */
+.btn-block {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+
+/* ─────────────────────────────────────────────
+   4. Header & Navbar
+   ───────────────────────────────────────────── */
+.site-header {
+  position: sticky; /* Stays at top when scrolling */
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.navbar {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.5px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-tagline {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  /* Hide on very small screens */
+  display: none;
+}
+
+/* The cart button in the navbar */
+.cart-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.cart-btn:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* The little red badge showing item count */
+.cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-accent);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 700;
+  /* Hidden when count is 0 — JS toggles this */
+  transition: transform 0.2s ease;
+}
+
+/* Animate the badge when count changes */
+.cart-count.bump {
+  animation: bump 0.3s ease;
+}
+
+@keyframes bump {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+
+/* ─────────────────────────────────────────────
+   5. Hero Section
+   ───────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #6c63ff 0%, #a78bfa 100%);
+  color: white;
+  padding: 5rem 1.5rem;
+  text-align: center;
+  /* Subtle decorative shape at the bottom */
+  clip-path: ellipse(100% 100% at 50% 0%);
+  padding-bottom: 7rem;
+}
+
+.hero-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem); /* Fluid font size — cool CSS trick */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+/* The highlighted word in the heading */
+.highlight {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: 0 0.3rem;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+/* Override the primary button for the hero (needs white text on light background) */
+.hero .btn-primary {
+  background-color: white;
+  color: var(--color-primary);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.hero .btn-primary:hover {
+  background-color: #f0eeff;
+  color: var(--color-primary-dark);
+}
+
+
+/* ─────────────────────────────────────────────
+   6. Products Section & Grid
+   ───────────────────────────────────────────── */
+.products-section {
+  padding: 4rem 0;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+/* Decorative underline on the section title */
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 50%;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* CSS Grid for the product cards */
+.product-grid {
+  display: grid;
+  /* auto-fill means it creates as many columns as fit.
+     minmax means each column is at least 260px wide.
+     This is the cleanest responsive grid trick in CSS! */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Loading / Error message shown while products fetch */
+.loading-msg {
+  grid-column: 1 / -1; /* Spans all columns */
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 3rem 0;
+  font-size: 1.1rem;
+}
+
+
+/* ─────────────────────────────────────────────
+   7. Product Card
+   ───────────────────────────────────────────── */
+.product-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
+  overflow: hidden; /* Keeps the image inside the rounded corners */
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Product image container — fixed height prevents layout jumping */
+.product-image-wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.product-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Crops the image to fill the space */
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image-wrapper img {
+  transform: scale(1.05); /* Subtle zoom on hover */
+}
+
+/* Text content area of the card */
+.product-info {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Makes all cards the same height in the grid */
+}
+
+.product-category {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  margin-bottom: 0.4rem;
+}
+
+.product-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.product-description {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  flex-grow: 1; /* Pushes the price/button to the bottom */
+  margin-bottom: 1rem;
+}
+
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.product-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* "Add to Cart" button on each card — smaller than hero button */
+.add-to-cart-btn {
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.add-to-cart-btn:hover {
+  background-color: var(--color-primary-dark);
+  transform: scale(1.05);
+}
+
+
+/* ─────────────────────────────────────────────
+   8. Cart Sidebar & Overlay
+   ───────────────────────────────────────────── */
+
+/* Dark overlay that covers the page when cart is open */
+.cart-overlay {
+  position: fixed;
+  inset: 0; /* Shorthand for top/right/bottom/left: 0 */
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 199;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+}
+
+/* The actual sidebar panel */
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--cart-width);
+  max-width: 100vw; /* Don't overflow on small screens */
+  height: 100vh;
+  background-color: var(--color-surface);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+
+  /* Start off-screen to the right, then slide in */
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When JS adds the 'is-open' class to the sidebar, this triggers */
+.cart-sidebar.is-open .cart-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cart-sidebar.is-open .cart-panel {
+  transform: translateX(0); /* Slides into view */
+}
+
+/* Cart Header */
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cart-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* The ✕ close button */
+.close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.close-btn:hover {
+  background-color: var(--color-border);
+  color: var(--color-text);
+}
+
+/* Cart Footer with total */
+.cart-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.cart-total strong {
+  font-size: 1.4rem;
+  color: var(--color-primary);
+}
+
+
+/* ─────────────────────────────────────────────
+   9. Cart Items
+   ───────────────────────────────────────────── */
+
+/* Scrollable area for the list of items */
+.cart-items {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Message shown when cart is empty */
+.empty-cart-msg {
+  text-align: center;
+  color: var(--color-text-muted);
+  margin: auto 0; /* Centers it vertically in the flex parent */
+  padding: 2rem 0;
+  font-size: 0.95rem;
+}
+
+/* Individual item row in the cart */
+.cart-item {
+  display: grid;
+  /* Three columns: image | text | remove button */
+  grid-template-columns: 65px 1fr auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.cart-item-img {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-item-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  /* Clamp to two lines so long names don't break layout */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cart-item-price {
+  font-size: 0.825rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* +/- quantity controls */
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background-color: var(--color-border);
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition);
+  line-height: 1;
+}
+
+.qty-btn:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.qty-number {
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Remove (trash) button */
+.remove-btn {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: color var(--transition), background-color var(--transition);
+  align-self: flex-start;
+}
+
+.remove-btn:hover {
+  color: #ef4444; /* Red */
+  background-color: #fef2f2;
+}
+
+
+/* ─────────────────────────────────────────────
+   10. Toast Notification
+   Pops up when an item is added to cart.
+   ───────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(calc(100% + 3rem));
+  background-color: var(--color-text);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px; /* Pill shape */
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 999;
+  white-space: nowrap;
+  /* Smooth slide-up animation */
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+  opacity: 0;
+  pointer-events: none; /* Can't be clicked */
+}
+
+/* JS adds this class to show the toast */
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+
+/* ─────────────────────────────────────────────
+   11. Footer
+   ───────────────────────────────────────────── */
+.site-footer {
+  background-color: var(--color-text);
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  margin-top: 4rem;
+}
+
+.site-footer strong {
+  color: white;
+}
+
+.footer-sub {
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  opacity: 0.5;
+}
+
+
+/* ─────────────────────────────────────────────
+   12. Responsive Design
+   Styles for screens smaller than 768px (tablets/phones)
+   ───────────────────────────────────────────── */
+@media (min-width: 600px) {
+  .nav-tagline {
+    display: inline; /* Show tagline on larger screens */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack the hero heading */
+  .hero {
+    padding: 3.5rem 1.25rem 5rem;
+  }
+
+  /* Cart takes full screen width on mobile */
+  .cart-panel {
+    width: 100vw;
+  }
+
+  /* Slightly smaller product names */
+  .product-name {
+    font-size: 0.95rem;
+  }
+
+  /* Stack price and button vertically on tiny screens */
+  .product-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
